@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Apply a pinned theme before first paint (no flash). Not a module, not deferred.
+      {
+        let pinned = null;
+        try {
+          pinned = localStorage.getItem('color-scheme');
+        } catch {}
+        if (pinned === 'light' || pinned === 'dark') {
+          document.documentElement.dataset.theme = pinned;
+          document.querySelector('meta[name="color-scheme"]').content = pinned;
+        }
+      }
+    </script>
+    <title>AWS in 3D | The Millennium Issue</title>
+    <meta
+      name="description"
+      content="AWS exam topics as 3D scenes you can step through, laid out like a tech magazine from the year 2000."
+    />
+    <meta name="theme-color" content="#613132" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="module" src="/src/js/home.js"></script>
+  </head>
+  <body class="page-home">
+    <a class="skip-link visually-hidden" href="#contents">Skip to contents</a>
+
+    <header class="topbar">
+      <div class="wrap">
+        <a class="logo" href="./" aria-current="page" aria-label="AWS in 3D, home">AWS <em>in</em> <b>3D</b></a>
+        <nav aria-label="Site">
+          <ul>
+            <li><a href="#contents">Contents</a></li>
+          </ul>
+        </nav>
+        <div class="tools" data-tools></div>
+      </div>
+    </header>
+
+    <main id="main" data-home>
+      <noscript>
+        <p class="wrap noscript">This magazine is interactive and needs JavaScript to show its contents.</p>
+      </noscript>
+    </main>
+
+    <footer class="colophon" data-colophon></footer>
+  </body>
+</html>

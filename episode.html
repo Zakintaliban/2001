@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Apply a pinned theme before first paint (no flash). Not a module, not deferred.
+      {
+        let pinned = null;
+        try {
+          pinned = localStorage.getItem('color-scheme');
+        } catch {}
+        if (pinned === 'light' || pinned === 'dark') {
+          document.documentElement.dataset.theme = pinned;
+          document.querySelector('meta[name="color-scheme"]').content = pinned;
+        }
+      }
+    </script>
+    <title>Episode | AWS in 3D</title>
+    <meta name="description" content="An AWS exam topic, explained as a 3D scene you can step through." />
+    <meta name="theme-color" content="#613132" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="module" src="/src/js/episode.js"></script>
+  </head>
+  <body class="page-episode">
+    <a class="skip-link visually-hidden" href="#reader">Skip to the episode</a>
+
+    <header class="topbar">
+      <div class="wrap">
+        <a class="logo" href="./" aria-label="AWS in 3D, home">AWS <em>in</em> <b>3D</b></a>
+        <nav aria-label="Site">
+          <ul>
+            <li><a href="./#contents">Contents</a></li>
+          </ul>
+        </nav>
+        <div class="tools" data-tools></div>
+      </div>
+    </header>
+
+    <main id="main" data-episode>
+      <noscript>
+        <p class="wrap noscript">This issue is interactive and needs JavaScript to show its 3D scenes and steps.</p>
+      </noscript>
+    </main>
+
+    <footer class="colophon" data-colophon></footer>
+
+    <div class="visually-hidden" aria-live="polite" data-announcer></div>
+  </body>
+</html>

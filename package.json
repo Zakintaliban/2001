@@ -1,0 +1,28 @@
+{
+  "name": "millennium-issue",
+  "private": true,
+  "version": "0.1.0",
+  "description": "AWS in 3D, styled as a printed tech magazine from the year 2000 that came alive.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check:contrast": "node scripts/contrast-check.mjs",
+    "check": "npm run check:contrast && npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource-variable/unbounded": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource/silkscreen": "^5.3.0",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "vite": "^8.3.3"
+  }
+}

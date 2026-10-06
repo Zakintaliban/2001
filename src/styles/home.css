@@ -1,0 +1,530 @@
+/* Home: magazine cover + table of contents. The maximal frame lives here. */
+
+@layer components {
+  /* ---------- Cover ---------- */
+
+  .cover {
+    position: relative;
+    overflow: clip;
+    color: var(--on-brand);
+    background-color: var(--brand);
+    background-image:
+      var(--halftone), radial-gradient(70% 60% at 50% 55%, rgb(191 227 255 / 0.22), transparent 70%),
+      radial-gradient(60% 50% at 100% 0%, rgb(255 179 217 / 0.2), transparent 70%),
+      linear-gradient(180deg, var(--brand), var(--brand-deep));
+    border-block-end: 4px solid var(--brand-deep);
+  }
+
+  .cover-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 0.85fr);
+    grid-template-areas:
+      'issue issue issue'
+      'logo  logo  logo'
+      'lines art   side';
+    column-gap: var(--space-6);
+    row-gap: var(--space-4);
+    padding-block: var(--space-4) var(--space-7);
+  }
+
+  .cover .issue-line {
+    grid-area: issue;
+  }
+
+  .cover-logo {
+    grid-area: logo;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.18em;
+    margin-block: var(--space-2) 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: var(--fs-display);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+
+    & .chrome-text {
+      display: inline-block;
+    }
+
+    & em {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: 0.55em;
+      letter-spacing: 0;
+      color: var(--on-brand-muted);
+    }
+  }
+
+  .cover-art {
+    grid-area: art;
+    position: relative;
+    align-self: center;
+    aspect-ratio: 1;
+    inline-size: 100%;
+    max-inline-size: 30rem;
+    justify-self: center;
+
+    /* Fallback until (or unless) WebGL draws: a CSS chrome sphere. */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 14%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 28%, #ffffff 0 8%, transparent 26%),
+        radial-gradient(circle at 60% 70%, rgb(201 182 255 / 0.7), transparent 45%),
+        linear-gradient(180deg, var(--chrome-1), var(--chrome-2) 46%, var(--chrome-3) 54%, var(--chrome-4));
+      box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.6);
+      transition: opacity var(--dur-slow) var(--ease-out);
+    }
+
+    &[data-ready]::before {
+      opacity: 0;
+    }
+
+    & canvas {
+      position: absolute;
+      inset: 0;
+      inline-size: 100%;
+      block-size: 100%;
+    }
+
+    /* Sparkle ornaments around the blob. */
+    & .sparkle {
+      position: absolute;
+      z-index: 1;
+      inline-size: var(--s, 1.5rem);
+      block-size: var(--s, 1.5rem);
+      inset-block-start: var(--y);
+      inset-inline-start: var(--x);
+      color: var(--c, var(--chrome-1));
+      filter: drop-shadow(0 0 6px rgb(255 255 255 / 0.6));
+    }
+  }
+
+  .cover-lines {
+    grid-area: lines;
+    display: grid;
+    align-content: center;
+    gap: var(--space-5);
+    margin: 0;
+
+    & a {
+      display: grid;
+      gap: var(--space-1);
+      color: inherit;
+      text-decoration: none;
+
+      &:hover strong {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.12em;
+      }
+    }
+
+    & .pixel {
+      color: var(--on-brand-muted);
+    }
+
+    & strong {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: var(--fs-28);
+      line-height: 1.05;
+    }
+
+    & li:first-child strong {
+      font-size: var(--fs-40);
+    }
+
+    & .cover-sub {
+      font-family: var(--font-serif);
+      font-size: var(--fs-20);
+      line-height: 1.25;
+      color: var(--on-brand-muted);
+    }
+
+    & li + li {
+      padding-block-start: var(--space-4);
+      border-block-start: 1px solid rgb(255 255 255 / 0.3);
+    }
+  }
+
+  .cover-side {
+    grid-area: side;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: var(--space-5);
+
+    & p {
+      margin: 0;
+    }
+
+    & .burst {
+      --burst-size: 8.5rem;
+
+      & > span {
+        font-size: var(--fs-20);
+      }
+    }
+
+    & .barcode {
+      justify-self: end;
+    }
+  }
+
+  .cover-chrome {
+    background: var(--chrome-brushed);
+    color: var(--on-chrome);
+  }
+
+  @media (width < 64rem) {
+    .cover-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas:
+        'issue issue'
+        'logo  logo'
+        'art   side'
+        'lines lines';
+    }
+  }
+
+  @media (width < 40rem) {
+    .cover-grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'issue'
+        'logo'
+        'art'
+        'side'
+        'lines';
+    }
+
+    .cover-art {
+      max-inline-size: 20rem;
+    }
+
+    .cover-side {
+      grid-auto-flow: column;
+      justify-content: space-between;
+      align-items: center;
+
+      & .burst {
+        --burst-size: 6.5rem;
+
+        & > span {
+          font-size: var(--fs-14);
+        }
+      }
+
+      & .barcode {
+        display: none;
+      }
+    }
+  }
+
+  /* ---------- Contents ---------- */
+
+  .contents {
+    margin-block: var(--space-7) 0;
+    outline: none;
+  }
+
+  /* Coverage strip: segment width = exam weight. */
+  .coverage {
+    margin: 0 0 var(--space-7);
+
+    & figcaption {
+      margin-block-end: var(--space-2);
+      color: var(--ink-muted);
+    }
+  }
+
+  .coverage-bar {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+
+    & li {
+      flex: var(--w) 1 0;
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-1) var(--space-2);
+      min-inline-size: 0;
+      padding: var(--space-3);
+      border: 2px solid var(--rule);
+      border-radius: var(--radius-s);
+      background: repeating-linear-gradient(-45deg, var(--hairline) 0 2px, transparent 2px 9px), var(--surface-panel);
+      color: var(--ink);
+    }
+
+    & li.is-covered {
+      border-color: var(--brand-deep);
+      background: linear-gradient(180deg, var(--bordeaux-500), var(--brand) 60%, var(--brand-deep));
+      color: var(--on-brand);
+    }
+
+    & .cov-id {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: var(--fs-20);
+    }
+
+    & .cov-weight {
+      font-family: var(--font-pixel);
+      font-size: var(--fs-12);
+    }
+
+    & .cov-count {
+      grid-column: 1 / -1;
+      font-family: var(--font-pixel);
+      font-size: var(--fs-12);
+      opacity: 0.9;
+    }
+
+    @media (width < 40rem) {
+      flex-direction: column;
+
+      & li {
+        flex: none;
+        inline-size: calc(var(--w) * 4%);
+        min-inline-size: 11rem;
+      }
+    }
+  }
+
+  .toc {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+    gap: var(--space-7) var(--space-5);
+    align-items: start;
+  }
+
+  .toc-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    padding-block: var(--space-3);
+    margin-block-end: var(--space-5);
+    border-block: 2px solid var(--rule);
+    font-weight: 400;
+
+    & .toc-id {
+      grid-row: span 2;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: var(--fs-28);
+      color: var(--brand-ink);
+    }
+
+    & .toc-name {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: var(--fs-20);
+      line-height: 1.15;
+    }
+
+    & .toc-weight {
+      color: var(--ink-muted);
+    }
+  }
+
+  .cards {
+    display: grid;
+    gap: var(--space-6);
+    margin: 0;
+  }
+
+  /* ---------- Trading cards ---------- */
+
+  .card-slot {
+    rotate: var(--tilt, 0deg);
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.15)) drop-shadow(0 12px 20px rgb(0 0 0 / 0.16));
+  }
+
+  .card {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    border: 3px solid var(--chrome-c);
+    outline: 1px solid var(--chrome-d);
+    border-radius: var(--radius-m);
+    background: var(--surface-panel);
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform var(--dur-med) var(--ease-out);
+
+    /* Glare that follows the pointer (set by home.js). */
+    &.is-live::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--mx, 30%) var(--my, 0%), rgb(255 255 255 / 0.35), transparent 45%);
+      mix-blend-mode: soft-light;
+    }
+
+    &:has(a:focus-visible) {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    & a:focus-visible {
+      outline: none;
+    }
+  }
+
+  .card-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    background-color: var(--brand);
+    background-image:
+      var(--halftone), radial-gradient(80% 80% at 70% 20%, rgb(255 179 217 / 0.3), transparent 60%),
+      linear-gradient(160deg, var(--bordeaux-500), var(--brand-deep));
+    color: var(--on-brand-muted);
+
+    & .card-number {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: var(--fs-64);
+      line-height: 1;
+    }
+
+    & .sparkle {
+      position: absolute;
+      inline-size: 1.25rem;
+      block-size: 1.25rem;
+      color: var(--chrome-1);
+      inset-block-start: 14%;
+      inset-inline-start: 12%;
+    }
+
+    & .sparkle + .sparkle {
+      inline-size: 0.75rem;
+      block-size: 0.75rem;
+      inset-block-start: auto;
+      inset-inline-start: auto;
+      inset-block-end: 16%;
+      inset-inline-end: 14%;
+    }
+  }
+
+  /* Planned issues: the back of the card. Quieter than the live one. */
+  .card.is-planned {
+    border-color: var(--surface-sunken);
+    background: var(--surface-page);
+  }
+
+  .card.is-planned .card-art {
+    aspect-ratio: 16 / 6;
+    place-items: center start;
+    padding-inline: var(--space-4);
+    background-color: var(--surface-sunken);
+    background-image: repeating-linear-gradient(135deg, var(--hairline) 0 2px, transparent 2px 10px);
+
+    & .card-number {
+      font-size: var(--fs-40);
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--ink-muted);
+    }
+
+    & .sparkle {
+      display: none;
+    }
+  }
+
+  .card.is-planned .card-title {
+    font-size: var(--fs-16);
+  }
+
+  .card.is-planned .card-deck {
+    font-size: var(--fs-16);
+    color: var(--ink-muted);
+  }
+
+  @media (forced-colors: active) {
+    .card.is-planned .card-art .card-number {
+      color: CanvasText;
+    }
+  }
+
+  .card-body {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+    padding: var(--space-4);
+  }
+
+  .card-folio,
+  .card-services {
+    color: var(--ink-muted);
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--fs-20);
+    line-height: 1.1;
+    text-transform: uppercase;
+
+    & a {
+      color: var(--ink);
+      text-decoration: none;
+
+      /* Whole card is the hit area. */
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .card-deck {
+    font-family: var(--font-serif);
+    font-size: var(--fs-20);
+    line-height: 1.2;
+  }
+
+  .card-sticker {
+    position: absolute;
+    inset-block-start: var(--space-3);
+    inset-inline-end: var(--space-3);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .card-stamp {
+    position: absolute;
+    inset-block-start: var(--space-4);
+    inset-inline-end: var(--space-3);
+    background: var(--surface-panel);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card {
+      transform: none;
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .card {
+      border: 2px solid CanvasText;
+    }
+  }
+}
