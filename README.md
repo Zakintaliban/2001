@@ -24,7 +24,9 @@ npm run preview      # serve dist/
 npm run check        # WCAG AA contrast check + build
 ```
 
-`dist/` uses relative URLs, so it works from any static host or sub-path (GitHub Pages included).
+`dist/` uses relative URLs, so it works from any static host or sub-path.
+
+**Live site:** <https://zakintaliban.github.io/2001/>. The `Deploy to GitHub Pages` workflow (`.github/workflows/pages.yml`) runs the checks, builds, and publishes `dist/` to the `gh-pages` branch on every push to `main` or the working branch.
 
 ## What's inside
 
